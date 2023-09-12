@@ -1,0 +1,9 @@
+.MuiAccordionSummary-root.Mui-expanded {
+  @apply bg-blue-100 !outline-none border border-solid border-blue-300 rounded-t;
+}
+.MuiAccordionSummary-root.Mui-focusVisible {
+  @apply !bg-white;
+}
+.MuiAccordionSummary-root.Mui-expanded.Mui-focusVisible {
+  @apply !bg-blue-100;
+}

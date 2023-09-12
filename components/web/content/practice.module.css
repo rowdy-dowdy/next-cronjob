@@ -1,0 +1,38 @@
+.practice :global(.practice-container) {
+  @apply w-full max-w-[1680px] mx-auto px-4;
+}
+
+.practice :global(.group-question-wrapper .question) {
+  @apply flex items-center space-x-2 text-sky-600 font-semibold;
+}
+.practice :global(.group-question-wrapper .question > *:last-child) {
+  @apply text-[#333];
+}
+
+.practice :global(.group-question-wrapper .question .input) {
+  margin-left: .75rem;
+  @apply min-w-[3.5rem] border-b-2 font-normal text-[#333] whitespace-nowrap;
+}
+
+.practice :global(.group-question-wrapper .question .input:focus) {
+  @apply outline-none border-sky-600;
+}
+
+.practice :global(.passage) {
+  @apply text-gray-500 select-none cursor-pointer;
+}
+.practice :global(.passage.active) {
+  @apply text-red-600;
+}
+
+.practice :global(.content h2) {
+  @apply text-3xl mb-4;
+}
+
+.practice :global(.content h3) {
+  @apply text-2xl mb-4;
+}
+
+.practice :global(.content p) {
+  @apply mb-4;
+}

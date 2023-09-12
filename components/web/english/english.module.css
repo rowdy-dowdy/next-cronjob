@@ -1,0 +1,23 @@
+.trueFalse :global(.btn-answer) {
+  @apply flex items-center space-x-2 px-3 py-1 hover:bg-gray-100 rounded-lg cursor-pointer text-sm;
+}
+.trueFalse :global(.btn-answer.active) {
+  @apply bg-blue-50 hover:bg-blue-50;
+}
+
+.trueFalse :global(.btn-answer.active span:first-child) {
+  @apply bg-blue-500 text-white;
+}
+
+.matching :global(.drop-box) { 
+  @apply px-2 py-1 border border-dashed border-transparent rounded;
+}
+.matching :global(.drop-box.is-drag-over) {
+  @apply border-blue-500 bg-blue-100 ;
+}
+.matching :global(.drop-box.is-drag-over .circle) {
+  @apply !bg-blue-200;
+}
+.matching :global(.drop-box.is-drag-over .text) {
+  @apply !text-blue-500;
+}
