@@ -1,10 +1,11 @@
 .screen {
+  --border: rgba(29,29,27,.15);
   width: 1082px;
   height: 698px;
   margin-left: -545px;
   margin-top: -353px;
   box-shadow: inset 0px 2px 0px 0px rgba(255,255,255,.15), 0px 3px 0px 0px rgba(255,255,255,0.15);
-  border: 4px rgba(29,29,27,.15) solid;
+  border: 4px var(--border) solid;
   @apply absolute top-1/2 left-1/2 rounded-xl p-4;
 }
 
