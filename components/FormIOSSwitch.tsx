@@ -84,6 +84,7 @@ const FormIOSSwitch: React.FC<ComponentType> = ({
         checked={checked} onChange={onChange} 
         inputProps={inputProps} sx={{ m: 1 }} 
         defaultChecked={defaultValue} size={size} 
+        color="error"
       />}
       label={label}
       style={{userSelect: 'none'}}
