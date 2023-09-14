@@ -32,7 +32,18 @@ function useResizeObserver<T extends HTMLElement>(
     }
 
     const observer = new ResizeObserver((entries) => {
-      callback(element, entries[0])
+      if (!entries[0]) {
+        return;
+      }
+
+      const { borderBoxSize, contentBoxSize } = entries[0];
+
+      // Lấy kích thước phù hợp (tùy chọn)
+      const size = borderBoxSize?.[0] || contentBoxSize?.[0];
+
+      if (size) {
+        callback(element, entries[0]);
+      }
     })
 
     observer.observe(element)

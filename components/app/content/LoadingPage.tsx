@@ -11,7 +11,7 @@ const LoadingPage = () => {
       autoplay
       loop
       mode="normal"
-      src="/lotties/animation_lmfyvt0n.json"
+      src="/lotties/loading.json"
       className="w-full h-full object-contain max-w-xs"
     />
   </motion.div>

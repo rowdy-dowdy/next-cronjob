@@ -108,7 +108,8 @@
     @apply block w-5 h-5;
   }
 
-  .icon-svg svg {
+  .icon-svg svg,
+  .icon-svg img {
     @apply !w-full !h-full !fill-current;
   }
 
