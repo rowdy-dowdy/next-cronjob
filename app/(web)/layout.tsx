@@ -39,7 +39,8 @@ export async function generateMetadata(
 
 const layout = async ({children}: {children: ReactNode}) => {
   return (
-    <AuthProvider>{children}</AuthProvider>
+    <>{children}</>
+    // <AuthProvider>{children}</AuthProvider>
   )
 }
 

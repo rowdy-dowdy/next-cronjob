@@ -1,7 +1,7 @@
 import { LinkProps } from 'next/link';
 import { ButtonHTMLAttributes, FC, ReactNode } from 'react';
 import { twMerge } from 'tailwind-merge';
-import LinkAuth from './LinkAuth';
+import LinkAuth from '../ui/LinkAuth';
 
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   children?: ReactNode;
@@ -21,7 +21,7 @@ const WebButton: FC<WebButtonProps> = (props) => {
 
   const classVariant = variant == "contained"
     ? 'rounded-md px-2 h-11 bg-gray-100 text-indigo-900 font-bold uppercase hover:bg-indigo-200 inline-flex items-center'
-    : `rounded-md px-2 h-11 border-2 border-gray-200 text-gray-200 font-bold uppercase hover:bg-white/20 inline-flex items-center`
+    : `rounded-md px-2 h-11 border-2 border-gray-300 text-gray-300 font-bold uppercase bg-black/20 hover:bg-white/20 inline-flex items-center`
 
   const commonClasses = twMerge(classVariant, rest.className)
 

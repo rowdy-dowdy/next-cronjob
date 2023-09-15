@@ -7,8 +7,8 @@ import styles from "../layouts/screen.module.css";
 
 import 'swiper/css';
 import 'swiper/css/pagination';
-import WebButton from "../ui/WebButton";
-import WebInput from "../ui/WebInput";
+import WebButton from "../form/WebButton";
+import WebInput from "../form/WebInput";
 import useWebGameStore from "@/stores/web/webGame";
 
 const HomePage = () => {
@@ -25,14 +25,14 @@ const HomePage = () => {
       <div className="flex-grow min-h-0 w-full flex space-x-6 px-4">
         <div className="w-3/5 px-4 flex flex-col">
           <div className="flex-none flex text-center">
-            <div className={`w-1/2 text-xl rounded-t-lg bg-[--border] cursor-pointer font-semibold uppercase p-2 
-              ${tab == 0 ? 'text text-teal-300' : 'mb-1 mr-1'}`}
+            <div className={`w-1/2 text-xl rounded-t-lg bg-[--border] cursor-pointer font-bold uppercase p-2 
+              ${tab == 0 ? 'text text-teal-300' : 'mb-1 mr-1 text-gray-300'}`}
               onClick={() => setTab(0)}
             >
               Ẩn danh
             </div>
-            <div className={`w-1/2 text-xl rounded-t-lg bg-[--border] cursor-pointer font-semibold uppercase p-2 
-              ${tab == 1 ? 'text text-teal-300' : 'mb-1 ml-1'}`}
+            <div className={`w-1/2 text-xl rounded-t-lg bg-[--border] cursor-pointer font-bold uppercase p-2 
+              ${tab == 1 ? 'text text-teal-300' : 'mb-1 ml-1 text-gray-300'}`}
               onClick={() => setTab(1)}
             >
               Đã xác thực
@@ -91,6 +91,7 @@ const SlideGuide = memo(() => {
     if (swiperEl.current) {
       swiper.current = new Swiper(swiperEl.current, {
         slidesPerView: 1,
+        loop: true,
         modules: [Pagination, Autoplay],
         autoplay: {
           delay: 5000
