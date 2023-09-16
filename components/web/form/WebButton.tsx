@@ -20,8 +20,8 @@ const WebButton: FC<WebButtonProps> = (props) => {
   const { children, icon, variant = "contained", href, ...rest } = props;
 
   const classVariant = variant == "contained"
-    ? 'rounded-md px-2 h-11 bg-gray-100 text-indigo-900 font-bold uppercase hover:bg-indigo-200 inline-flex items-center'
-    : `rounded-md px-2 h-11 border-2 border-gray-300 text-gray-300 font-bold uppercase bg-black/20 hover:bg-white/20 inline-flex items-center`
+    ? 'rounded-md px-2 h-11 bg-gray-100 text-indigo-900 font-black uppercase hover:bg-indigo-200 inline-flex items-center'
+    : `rounded-md px-2 h-11 border-2 border-gray-300 text-gray-300 font-black uppercase bg-black/20 hover:bg-white/20 inline-flex items-center`
 
   const commonClasses = twMerge(classVariant, rest.className)
 

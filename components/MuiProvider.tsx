@@ -3,14 +3,14 @@
 import { createTheme, alpha, getContrastRatio } from "@mui/material/styles";
 import { ThemeProvider, CssBaseline } from '@mui/material'
 import React, { useEffect, useRef, useState } from "react";
-import { Roboto } from 'next/font/google'
+import { Nunito, M_PLUS_Rounded_1c } from 'next/font/google'
 import { SnackbarProvider } from "notistack";
 import useSettings from "@/stores/settings";
 import { StyleRegistry, createStyleRegistry } from "styled-jsx";
 import { useServerInsertedHTML } from "next/navigation";
 
-const font = Roboto({
-  weight: ['400', '500', '700'],
+const font = Nunito({
+  weight: ['900', '700'],
   style: ['normal', 'italic'],
   subsets: ['latin']
 })
@@ -39,8 +39,8 @@ export const lightTheme = createTheme({
     }
   },
   typography: {
-    fontFamily: ''
-    // fontFamily: font.style.fontFamily
+    // fontFamily: ''
+    fontFamily: font.style.fontFamily
   }
 })
 
@@ -51,6 +51,11 @@ declare module "@mui/material" {
   }
 
   interface IconButtonPropsColorOverrides {
+    black: true,
+    white: true,
+  }
+
+  interface SliderPropsColorOverrides {
     black: true,
     white: true,
   }
@@ -82,11 +87,11 @@ const MuiProvider: React.FC<{
 
   return (
     <ThemeProvider theme={lightTheme}>
-      {/* <style global jsx>{`
+      <style global jsx>{`
         html {
           font-family: ${font.style.fontFamily};
         }
-      `}</style> */}
+      `}</style>
       <CssBaseline />
       <SnackbarProvider maxSnack={3} autoHideDuration={3000} anchorOrigin={{
         vertical: 'top',

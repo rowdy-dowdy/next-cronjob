@@ -7,7 +7,7 @@ const WebSelect: FC<SelectHTMLAttributes<HTMLSelectElement>> = (props)  => {
   const { children, ...rest } = props;
 
   const commonClasses = twMerge(
-    `rounded-md border-2 border-gray-100 !bg-white/10 text-gray-100 font-bold text-lg`,
+    `rounded-md border-2 border-gray-100 !bg-white/10 text-gray-100 font-black text-lg`,
     rest.className
   )
 

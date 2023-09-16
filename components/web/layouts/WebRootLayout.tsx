@@ -64,11 +64,11 @@ const WebRootLayout = ({ children }: {
         style={{width: '100%', height: '100%'}}
       >
         <div className="absolute w-full h-full bg-black/20"></div>
-        <img src="https://garticphone.com/images/textura.png" alt="" className="absolute w-full h-full" />
+        <img src="https://garticphone.com/images/textura.png" alt="" className="absolute w-full h-full object-cover object-no-repeat" />
 
         <div 
           ref={screenEl} 
-          className={`${styles.screen} absolute top-1/2 left-1/2 rounded-xl p-5 text-gray-100 select-none overflow-hidden`}
+          className={`${styles.screen} absolute top-1/2 left-1/2 rounded-xl p-5 text-gray-100 select-none overflow-hidden font-black`}
         >
           {children}
         </div>
