@@ -6,20 +6,32 @@ import { useEffect, useRef, useState, MouseEvent } from "react";
 import WaitTime from "../ui/WaitTime";
 import WebButton from "../form/WebButton";
 import { Slider } from "@mui/material";
-import { addAlpha } from "@/lib/utils/helper";
+
+type ToolState = "draw" | "ink_eraser" | "square" | "circle" | "change_history" | "pen_size_2" | "colorize" | "clear_all" | "turn_slight_left" | "turn_slight_right"
+
+type PathState = {
+  color: string, opacity: number, 
+  lineWidth: number,
+} & ({
+  type: 'draw' | 'ink_eraser',
+  points: { x: number, y:number }[],
+} | {
+  type: 'square',
+  points: { x: number, y: number, w: number, h: number }
+})
 
 const colors = ["#09090b",  "#737373",  "#ef4444", "#fff", "#d4d4d8", "#f97316", 
   "#eab308", "#b91c1c", "#c2410c", "#a16207", "#84cc16", "#14b8a6",
   "#22c55e", "#3b82f6", "#8b5cf6", "#15803d", "#1d4ed8", "#4338ca", 
   "#d946ef", "#ec4899", "#f43f5e"]
 
-const tools = ["draw", "ink_eraser", "square", "circle", "change_history", "pen_size_2", "colorize", "clear_all", "turn_slight_left", "turn_slight_right"]
+const tools: ToolState[] = ["draw", "ink_eraser", "square", "circle", "change_history", "pen_size_2", "colorize", "clear_all", "turn_slight_left", "turn_slight_right"]
 
 const lineWidths = [3, 6, 9, 12, 15]
 
 const DrawPage = () => {
   const [colorCurrent, setColorCurrent] = useState(colors[0])
-  const [toolCurrent, setToolCurrent] = useState(tools[0])
+  const [toolCurrent, setToolCurrent] = useState<ToolState>(tools[0])
   const [globalAlpha, setGlobalAlpha] = useState(100)
   const [lineWidthCurrent, setLineWidthCurrent] = useState(lineWidths[0])
 
@@ -49,11 +61,7 @@ const DrawPage = () => {
     ctx.globalCompositeOperation = "destination-atop"
   }, [])
 
-  const paths = useRef<{
-    color: string, opacity: number, 
-    points: { x: number, y:number }[],
-    lineWidth: number
-  }[]>([])
+  const paths = useRef<PathState[]>([])
 
   const handleMouseDown = (e: MouseEvent<HTMLCanvasElement>) => {
     if (!canvasEl.current) return
@@ -61,19 +69,23 @@ const DrawPage = () => {
     const x = e.nativeEvent.offsetX
     const y = e.nativeEvent.offsetY
 
-    if (rootCanvasEl.current) {
-      drawPath(rootCanvasEl.current, paths.current)
+    if (rootCanvasEl.current && paths.current.length > 0) {
+      drawPath(rootCanvasEl.current, paths.current[paths.current.length - 1])
     }
 
-    const path = {
+    // @ts-ignore
+    const path: PathState = {
       color: colorCurrent,
       opacity: globalAlpha / 100,
       lineWidth: lineWidthCurrent,
-      points: [{ x, y }]
+      type: toolCurrent as PathState['type'],
+      points: 
+        toolCurrent == "draw" ? [{ x, y }]
+        : toolCurrent == "square" ? { x, y, w: 0, h: 0}
+        : []
     }
 
     paths.current.push(path)
-
     drawPath(canvasEl.current, path)
 
     setIsDrawing(true)
@@ -86,8 +98,18 @@ const DrawPage = () => {
     const y = e.nativeEvent.offsetY
 
     const currentPath = paths.current[paths.current.length - 1]
-    currentPath.points.push({ x, y })
 
+    if (currentPath.type == "draw") {
+      currentPath.points.push({ x, y })
+    }
+    else if (currentPath.type == "square") {
+      currentPath.points = {
+        ...currentPath.points,
+        w: x - currentPath.points.x,
+        h: y - currentPath.points.y
+      }
+    } 
+    
     drawPath(canvasEl.current, currentPath)
   }
 
@@ -97,8 +119,7 @@ const DrawPage = () => {
     setIsDrawing(false)
   }
 
-  const drawPath = (canvas: HTMLCanvasElement, path: any | any[]) => {
-    if (!canvas) return
+  const drawPath = (canvas: HTMLCanvasElement, path: PathState | PathState[]) => {
     const ctx = canvas.getContext('2d') as CanvasRenderingContext2D;
 
     let paths = []
@@ -115,16 +136,22 @@ const DrawPage = () => {
       ctx.strokeStyle = v.color
       ctx.globalAlpha = v.opacity
       ctx.lineWidth = v.lineWidth
-      ctx.beginPath()
-  
-      const startPoint = v.points[0]
-      ctx.moveTo(startPoint.x, startPoint.y)
-  
-      for (const point of v.points) {
-        ctx.lineTo(point.x, point.y)
+
+      if (v.type == "draw") {
+        ctx.beginPath()
+    
+        const startPoint = v.points[0]
+        ctx.moveTo(startPoint.x, startPoint.y)
+    
+        for (const point of v.points) {
+          ctx.lineTo(point.x, point.y)
+        }
+    
+        ctx.stroke()
       }
-  
-      ctx.stroke()
+      else if (v.type == "square") {
+        ctx.strokeRect(v.points.x, v.points.y, v.points.w, v.points.h)
+      }
     })
   }
 
@@ -181,7 +208,6 @@ const DrawPage = () => {
                   onMouseDown={handleMouseDown}
                   onMouseMove={handleMouseMove}
                   onMouseUp={handleMouseUp}
-
                 ></canvas>
               </div>
             </div>
