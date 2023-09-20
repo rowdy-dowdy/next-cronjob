@@ -18,6 +18,9 @@ type PathState = {
 } | {
   type: 'square',
   points: { x: number, y: number, w: number, h: number }
+} | {
+  type: 'circle',
+  points: { x: number, y: number, r: number }
 })
 
 const colors = ["#09090b",  "#737373",  "#ef4444", "#fff", "#d4d4d8", "#f97316", 
@@ -82,6 +85,7 @@ const DrawPage = () => {
       points: 
         toolCurrent == "draw" ? [{ x, y }]
         : toolCurrent == "square" ? { x, y, w: 0, h: 0}
+        : toolCurrent == "circle" ? { x, y, r: 0}
         : []
     }
 
