@@ -112,6 +112,12 @@ const DrawPage = () => {
         w: x - currentPath.points.x,
         h: y - currentPath.points.y
       }
+    }
+    else if (currentPath.type == "circle") {
+      currentPath.points = {
+        ...currentPath.points,
+        r: Math.sqrt(Math.pow((x - currentPath.points.x), 2) + Math.pow((y - currentPath.points.y), 2))
+      }
     } 
     
     drawPath(canvasEl.current, currentPath)
@@ -137,11 +143,17 @@ const DrawPage = () => {
     }
 
     paths.forEach(v => {
-      ctx.strokeStyle = v.color
-      ctx.globalAlpha = v.opacity
+      if (v.type == "ink_eraser") {
+        ctx.strokeStyle = '#fff'
+        ctx.globalAlpha = 1
+      }
+      else {
+        ctx.strokeStyle = v.color
+        ctx.globalAlpha = v.opacity
+      }
       ctx.lineWidth = v.lineWidth
 
-      if (v.type == "draw") {
+      if (v.type == "draw" || v.type == "ink_eraser") {
         ctx.beginPath()
     
         const startPoint = v.points[0]
@@ -155,6 +167,11 @@ const DrawPage = () => {
       }
       else if (v.type == "square") {
         ctx.strokeRect(v.points.x, v.points.y, v.points.w, v.points.h)
+      }
+      else if (v.type == "circle") {
+        ctx.beginPath()
+        ctx.arc(v.points.x, v.points.y, v.points.r, 0, 2 * Math.PI)
+        ctx.stroke()
       }
     })
   }
