@@ -21,6 +21,12 @@ type PathState = {
 } | {
   type: 'circle',
   points: { x: number, y: number, r: number }
+} | {
+  type: 'triage',
+  points: { x: number, y: number, r: number }
+} | {
+  type: 'line',
+  points: { x: number, y: number, x2: number, y2: number }
 })
 
 const colors = ["#09090b",  "#737373",  "#ef4444", "#fff", "#d4d4d8", "#f97316", 
