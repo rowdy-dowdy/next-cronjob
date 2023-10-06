@@ -88,3 +88,12 @@ export const addAlpha = (color: string, opacity: number) => {
   var _opacity = Math.round(Math.min(Math.max(opacity || 1, 0), 1) * 255);
   return color + _opacity.toString(16).toUpperCase();
 }
+
+export const parseDataInString = (str?: string | null) => {
+  try {
+    if (!str) return str
+    return JSON.parse(str)
+  } catch (error) {
+    return str
+  }
+}

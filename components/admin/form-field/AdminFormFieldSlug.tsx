@@ -3,9 +3,9 @@ import { FC } from 'react'
 import slugify from 'slugify'
 
 type State = {
-  label?: string,
+  label?: string | null,
   name?: string
-  required?: boolean,
+  required?: boolean | null,
   defaultValue?: string,
   value?: string,
   placeholder?: string,
@@ -49,7 +49,7 @@ const AdminFormFieldSlug: FC<State> = ({
         : null
       }
       <div className="border rounded focus-within:ring-2 ring-blue-500 bg-white">
-        <input type='text' name={name} value={value} defaultValue={defaultValue} onChange={(e) => changeEvent(e)} className="w-full px-4 py-2" placeholder={placeholder} required={required} />
+        <input type='text' name={name} value={value} defaultValue={defaultValue} onChange={(e) => changeEvent(e)} className="w-full px-4 py-2" placeholder={placeholder} required={required || false} />
       </div>
     </div>
   )

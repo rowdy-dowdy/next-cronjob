@@ -3,9 +3,9 @@ import FormIOSSwitch from '@/components/FormIOSSwitch'
 import { ChangeEvent } from 'react'
 
 type State = {
-  label?: string,
+  label?: string | null,
   name?: string
-  required?: boolean,
+  required?: boolean | null,
   className?: string,
   placeholder?: string,
   defaultValue?: any,

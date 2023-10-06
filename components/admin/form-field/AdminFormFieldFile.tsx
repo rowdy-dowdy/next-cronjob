@@ -6,9 +6,9 @@ import FilesSlide from './image/FileSlide';
 import { FileTypeState } from '@/lib/admin/sample';
 
 type AdminFormFieldFileType = {
-  label?: string,
+  label?: string | null,
   name?: string
-  required?: boolean,
+  required?: boolean | null,
   defaultValue?: File[] | File | null,
   value?: File[] | File | null,
   onChange?: (data: any) => void
@@ -70,7 +70,7 @@ const AdminFormFieldFile: React.FC<AdminFormFieldFileType> = ({
         : null
       }
       <div className={`h-40 border rounded bg-white ${className}`}>
-        <input type="hidden" name={name} value={id} className='sr-only' required={required} />
+        <input type="hidden" name={name} value={id} className='sr-only' required={required || false} />
         <div className="w-full h-full flex flex-col justify-center items-center cursor-pointer"
           onClick={handelShowModal}
         >

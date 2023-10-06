@@ -1,4 +1,4 @@
-import { SampleFieldAndDetailsType } from "./sample"
+import { SampleColumnsType, SampleFieldAndDetailsType } from "./sample"
 import AdminFormFieldText from "@/components/admin/form-field/AdminFormFieldText";
 import AdminFormFieldRichText from "@/components/admin/form-field/AdminFormFieldRichText";
 import AdminFormFieldNumber from "@/components/admin/form-field/AdminFormFieldNumber";
@@ -16,9 +16,10 @@ export type DataFieldType = Record<SampleFieldAndDetailsType['type'], {
   fieldName: string,
   icon: string,
   Component: React.FC<{
-    label?: string,
+    label?: string | null,
+    isReturnData?: boolean,
     name?: string
-    required?: boolean,
+    required?: boolean | null,
     defaultValue?: any,
     value?: any,
     onChange?: (data: any) => void
@@ -33,7 +34,7 @@ export const DATA_FIELDS: DataFieldType = {
   'slug': { fieldName: "Slug", icon: 'text_fields', Component: AdminFormFieldSlug },
   'text': { fieldName: "Rich text", icon: 'border_color', Component: AdminFormFieldRichText },
   'int': { fieldName: "Number", icon: 'tag', Component: AdminFormFieldNumber },
-  'bool': { fieldName: "Boolean", icon: 'toggle_on', Component: AdminFormFieldBool },
+  'bool': { fieldName: "Boolean", icon: 'toggle_on', Component: AdminFormFieldBool, defaultValue: false },
   'date': { fieldName: "Date Time", icon: 'calendar_today', Component: AdminFormFieldDateTime },
   'file': { fieldName: "File", icon: 'attachment', Component: AdminFormFieldFile },
   'select': { fieldName: "Select", icon: 'checklist', Component: AdminFormFieldSelect },
@@ -45,11 +46,24 @@ export const DATA_FIELDS: DataFieldType = {
 }
 
 export const findSettingByName = (arr: any[], name: string) : any | undefined => {
-  return arr.find(v => v.name == name)?.value || undefined
+  return arr.find(v => v.name == name)?.value ?? undefined
 }
 
 export const checkPermissions = (permission: PermissionsOnRoles[], tableName: string, 
   key: 'browse' | 'create' | 'edit' | 'delete' | 'image' 
 ): boolean => {
   return permission.findIndex(v => v.permissionTableName == tableName && v.permissionKey == key) >= 0
+}
+
+export const createDefaultValue = (column: SampleColumnsType) => {
+  if (column.type == "custom" && column.details.defaultValue) {
+    return column.details.defaultValue
+  }
+
+  const dataField = DATA_FIELDS[column.type]
+  if (typeof dataField.defaultValue != "undefined") {
+    return dataField.defaultValue
+  }
+
+  return ''
 }

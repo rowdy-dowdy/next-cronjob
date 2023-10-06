@@ -7,13 +7,14 @@ import bcrypt from 'bcrypt'
 import { checkPermissions } from "./fields";
 import { FC } from "react";
 import { TABLES_SAMPLE } from "@/app/admin/(admin)/(sample)/[slug]/table";
+import { parseDataInString } from "../utils/helper";
 
 export type SampleColumnsType = {
   name: string,
-  label: string,
+  label?: string | null,
   show: boolean,
-  required?: boolean,
-  col?: number
+  required?: boolean | null,
+  col?: number | null
 } & SampleFieldAndDetailsType
 
 export type SampleFieldAndDetailsType = (
@@ -246,10 +247,10 @@ export const addEditDataSample = async ({
         }
         else if (pre.type == "file") {
           if (data[pre.name]) {
-            let tempConnect = { id: data[pre.name] }
+            let tempConnect = { id: data[pre.name]['id'] }
             if (pre.details.multiple) {
-              tempConnect = data[pre.name].map((v: string) => ({
-                id: v
+              tempConnect = data[pre.name].map((v: any) => ({
+                id: v['id']
               }))
             }
             return { [pre.name]: { connect: tempConnect } }
@@ -259,10 +260,10 @@ export const addEditDataSample = async ({
         }
         else if (pre.type == "relation") {
           if (data[pre.name]) {
-            let tempConnect = { id: data[pre.name] }
+            let tempConnect = { id: data[pre.name]['id'] }
             if (pre.details.typeRelation == 'one-to-many' || pre.details.typeRelation == 'many-to-many') {
-              tempConnect = data[pre.name].map((v: string) => ({
-                id: v
+              tempConnect = data[pre.name].map((v: any) => ({
+                id: v['id']
               }))
             }
             return { [pre.name]: { connect: tempConnect } }
@@ -467,7 +468,8 @@ export const getValueSettings = async (settings: Setting[]) => {
 
     return {
       ...v2,
-      details: v2.details ? JSON.parse(v2.details) : {}
+      value: parseDataInString(v2.value),
+      details: v2.details ? JSON.parse(v2.details) : null
     }
   }))
 }

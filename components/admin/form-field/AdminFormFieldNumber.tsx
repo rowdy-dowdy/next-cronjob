@@ -2,9 +2,9 @@
 import React from 'react'
 
 type State = {
-  label?: string,
+  label?: string | null,
   name?: string
-  required?: boolean,
+  required?: boolean | null,
   defaultValue?: string,
   number?: boolean
   value?: string,
@@ -36,8 +36,8 @@ const AdminFormFieldNumber: React.FC<State> = ({
       }
       <div className="border rounded focus-within:ring-2 ring-blue-500 bg-white">
         { value != undefined
-          ? <input type='number' name={name} value={value} onChange={(e) => changeEvent(e)} className="w-full px-4 py-2" required={required} />
-          : <input type='number' name={name} defaultValue={defaultValue} className="w-full px-4 py-2" required={required} />
+          ? <input type='number' name={name} value={value} onChange={(e) => changeEvent(e)} className="w-full px-4 py-2" required={required || false} />
+          : <input type='number' name={name} defaultValue={defaultValue} className="w-full px-4 py-2" required={required || false} />
         }
       </div>
     </div>

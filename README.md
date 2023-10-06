@@ -1,7 +1,7 @@
-# Next.js Sample Admin
+## Next.js Sample Admin
 - create model in Prisma (required id, createdAt, updateAd or publish)
 - run seed
-- add to TABLE_SAMPLES
+- add to TABLE_SAMPLES, GROUPS (settings)
 
-# pm2 start
-pm2 start npm --name "english" -- start2
+## pm2 start
+pm2 start pm2.json

@@ -7,52 +7,36 @@ import React from 'react'
 import { TABLES_SAMPLE } from '../(sample)/[slug]/table'
 import { checkPermissions } from '@/lib/admin/fields'
 
-type GroupType = {
+export type GroupType = {
   name: string,
-  settings: ({
-    name: string,
-    col?: number
-  } & SampleFieldAndDetailsType)[]
+  label?: string,
+  settings: SampleColumnsType[]
 }
 
 const GROUPS: GroupType[] = [
-  { name: "Site", settings: [
-    { name: 'site title', type: 'string' },
-    { name: 'site description', type: 'string' },
-    { name: 'site logo', type: 'file', details: {
+  { name: "site", label: "Site", settings: [
+    { name: 'site title', label: 'Tiêu đề', type: 'string', show: true },
+    { name: 'site description', label: 'Mô tả', type: 'string', show: true },
+    { name: 'site logo', label: 'logo', type: 'file', details: {
       multiple: false,
       onlyTable: true,
       fileTypes: ['image']
-    }},
-    { name: 'site favicon', type: 'file', details: {
+    }, show: true},
+    { name: 'site favicon', label: 'Favicon', type: 'file', details: {
       multiple: false,
       onlyTable: true,
       fileTypes: ['image']
-    }},
-    { name: 'banner', type: 'file', details: {
-      multiple: false,
-      onlyTable: true,
-      fileTypes: ['image']
-    }, col: 4},
-    { name: 'so do', type: 'file', details: {
-      multiple: false,
-      onlyTable: true,
-      fileTypes: ['image']
-    }, col: 4 },
-    { name: 'main audio', type: 'file', details: {
-      multiple: false,
-      onlyTable: true,
-      fileTypes: ['audio']
-    }, col: 4},
+    }, show: true},
   ] },
-  { name: "Admin", settings: [
-    { name: 'admin title', type: 'string' },
-    { name: 'admin description', type: 'string' },
-    { name: 'admin logo', type: 'file', details: {
+  { name: "admin", label: "Admin", settings: [
+    { name: 'admin title', label: 'Tiêu đề trang quản trị', type: 'string', show: true },
+    { name: 'admin description', label: 'Mô tả trang quản trị', type: 'string', show: true },
+    { name: 'admin logo', label: 'logo trang quản trị', type: 'file', details: {
       multiple: false,
       onlyTable: true,
       fileTypes: ['image']
-    } },
+    }, show: true },
+    { name: 'preview mode', label: 'Chế độ xem trước', type: 'bool', show: true },
   ] }
 ]
 
@@ -68,6 +52,9 @@ const getData = async () => {
   const data = await db.groupSetting.findMany({
     include: {
       settings: true
+    },
+    orderBy: {
+      sort: 'asc'
     }
   })
 
@@ -76,8 +63,10 @@ const getData = async () => {
     settings: await getValueSettings(v.settings)
 
   })) as any[] as GroupSettingType[])
+
+  const groupSettingsFormat = groupSettings.map(v => ({...v, settings: v.settings.sort((a, b) => (a?.sort || 0) - (b?.sort || 0))}))
  
-  return groupSettings
+  return groupSettingsFormat
 }
 
 const createEditSetting = async () => {
@@ -95,16 +84,22 @@ const createEditSetting = async () => {
     await db.groupSetting.deleteMany()
 
     await db.$transaction(
-      GROUPS.map(v => db.groupSetting.create({
+      GROUPS.map((v,i) => db.groupSetting.create({
         data: {
           name: v.name,
+          label: v.label,
+          sort: i + 1,
           settings: {
-            create: v.settings.map(v2 => ({
+            create: v.settings.map((v2,i2) => ({
               name: v2.name,
+              label: v2.label,
               type: v2.type,
               col: v2.col,
+              show: v2.show,
+              required: v2.required ?? false,
               details: JSON.stringify(v2.details),
-              value: oldSettings.find(v3 => v3.name == v2.name)?.value
+              value: oldSettings.find(v3 => v3.name == v2.name)?.value,
+              sort: i2 + 1
             }))
           }
         }
@@ -132,7 +127,7 @@ const createEditSetting = async () => {
   } 
 }
 
-const saveSetting = async(data : Array<[string, string]>) => {
+const saveSetting = async(data : {name: string, value: string}[]) => {
   "use server"
 
   const user = await useCurrentUserAdmin()
@@ -143,12 +138,12 @@ const saveSetting = async(data : Array<[string, string]>) => {
       throw "Forbidden";
     }
 
-    await db.$transaction(data.map(([key, value]) => db.setting.update({
+    await db.$transaction(data.map(({name, value}) => db.setting.update({
       where: {
-        name: key
+        name
       },
       data: {
-        value: value
+        value
       }
     })))
 
@@ -184,6 +179,7 @@ async function page() {
 
   return (
     <SettingContentAdmin groupSettings={groupSettings} 
+      GROUPS={GROUPS}
       createEditSetting={createEditSetting} 
       saveSetting={saveSetting}
       canCreate={checkPermissions(admin?.role.permissions || [], "setting", "create")}

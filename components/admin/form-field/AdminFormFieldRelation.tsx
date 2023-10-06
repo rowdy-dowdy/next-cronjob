@@ -5,9 +5,9 @@ import { VariantType, enqueueSnackbar } from 'notistack'
 import React, { useEffect, useState, useRef, Dispatch, SetStateAction } from 'react'
 
 type State = {
-  label?: string,
+  label?: string | null,
   name?: string
-  required?: boolean,
+  required?: boolean | null,
   defaultValue?: any,
   value?: any,
   onChange?: (data: any) => void
@@ -113,7 +113,7 @@ const AdminFormFieldRelation: React.FC<State> = ({
           <TextField
             {...params}
             size='small'
-            required={required}
+            required={required || false}
             InputProps={{
               ...params.InputProps,
               endAdornment: (

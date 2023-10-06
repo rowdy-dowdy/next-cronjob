@@ -3,9 +3,9 @@ import { FormControl, FormHelperText, MenuItem, Select, SelectChangeEvent } from
 import React, { useState } from 'react'
 
 type State = {
-  label?: string,
+  label?: string | null,
   name?: string
-  required?: boolean,
+  required?: boolean | null,
   defaultValue?: any,
   value?: any,
   onChange?: (data: string) => void
@@ -58,7 +58,7 @@ const AdminFormFieldSelect: React.FC<State> = ({
           displayEmpty
           size='small'
           name={name}
-          required={required}
+          required={required || false}
           className='bg-white'
         >
           { !required && <MenuItem value="">

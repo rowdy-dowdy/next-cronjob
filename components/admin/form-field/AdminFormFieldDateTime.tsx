@@ -2,9 +2,9 @@
 import React, { useRef } from 'react'
 
 type State = {
-  label?: string,
+  label?: string | null,
   name?: string
-  required?: boolean,
+  required?: boolean | null,
   className?: string,
   placeholder?: string
 }
@@ -24,7 +24,7 @@ const AdminFormFieldDateTime: React.FC<State> = ({
       }
       <input type="text" name={name}
         className="w-full border-none !bg-transparent" 
-        required={required} placeholder={placeholder}
+        required={required || false} placeholder={placeholder}
       />
     </div>
   )

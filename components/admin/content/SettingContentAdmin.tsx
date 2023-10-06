@@ -1,10 +1,12 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState, FC } from 'react'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle } from '@mui/material';
-import { GroupSettingType } from '@/app/admin/(admin)/settings/page';
-import { DATA_FIELDS } from '@/lib/admin/fields';
+import { GroupSettingType, GroupType } from '@/app/admin/(admin)/settings/page';
+import { DATA_FIELDS, createDefaultValue } from '@/lib/admin/fields';
 import { promiseFunction } from '@/lib/admin/promise';
 import { useRouter } from 'next/navigation';
+import slugify from 'slugify';
+import { SampleColumnSlugType } from '@/lib/admin/sample';
 
 type State = {
   groupSettings: GroupSettingType[],
@@ -12,15 +14,16 @@ type State = {
   saveSetting: (data: any) => Promise<void>
   canDelete: boolean,
   canEdit: boolean,
-  canCreate: boolean
+  canCreate: boolean,
+  GROUPS: GroupType[]
 }
 
-const SettingContentAdmin: React.FC<State> = ({
+const SettingContentAdmin: FC<State> = ({
   groupSettings, createEditSetting, saveSetting,
-  canDelete, canCreate, canEdit
+  canDelete, canCreate, canEdit, GROUPS
 }) => {
   const router = useRouter()
-  const [groupActive, setGroupActive] = React.useState(groupSettings.length > 0 ? groupSettings[0] : undefined);
+  const [groupActive, setGroupActive] = useState(groupSettings.length > 0 ? groupSettings[0] : undefined);
 
   const settings = groupActive != undefined ? groupActive.settings : []
 
@@ -29,6 +32,41 @@ const SettingContentAdmin: React.FC<State> = ({
   useEffect(() => {
     setGroupActive(groupSettings.length > 0 ? groupSettings[0] : undefined)
   }, [groupSettings])
+
+  // list data
+  const [listDataValue, setListDataValue] = useState<{
+    name: string,
+    value: any
+  }[]>(groupActive?.settings.map(v => ({ name: v.name, value: v.value ?? createDefaultValue(v)})) || [])
+
+  useEffect(() => {
+    setListDataValue(groupActive?.settings.map(v => ({ name: v.name, value: v.value ?? createDefaultValue(v)})) || [])
+  }, [groupActive])
+
+  const onChangeValue = (value: any, name: string) => {
+    let columns = GROUPS.find(v => v.name == groupActive?.name)?.settings || []
+
+    let column = (columns.filter(v => v.type == "slug") as ({
+      name: string
+    } & SampleColumnSlugType)[]).find(v => v.details.tableNameSlug == name)
+
+    setListDataValue(state => state.map(v => {
+      if (column && v.name == column.name) {
+        return { ...v, value: slugify(value, {
+          replacement: '_',
+          lower: true,
+          locale: 'vi',
+          trim: false
+        }) }
+      }
+
+      if (v.name == name) {
+        return {...v, value}
+      }
+
+      return v
+    }))
+  }
 
 
   // save settings
@@ -40,12 +78,7 @@ const SettingContentAdmin: React.FC<State> = ({
       loading: loading,
       setLoading: setLoading,
       callback: async () => {
-
-        const formData = Array.from(
-          new FormData(e.target as HTMLFormElement),
-        )
-
-        await saveSetting(formData)
+        await saveSetting(listDataValue)
         router.refresh()
       }
     })
@@ -63,7 +96,7 @@ const SettingContentAdmin: React.FC<State> = ({
                   className={`py-2 capitalize hover:text-blue-500 cursor-pointer 
                     ${v.id == groupActive?.id ? 'border-b-2 border-blue-500 text-blue-500' : ''}`}
                   onClick={() => setGroupActive(v)}
-                >{v.name}</div>
+                >{v.label}</div>
               )}
             </div>
           </div>
@@ -82,8 +115,11 @@ const SettingContentAdmin: React.FC<State> = ({
                   const Component = DATA_FIELDS[v.type] ? DATA_FIELDS[v.type].Component : null
                   return Component ? <div key={v.id} style={{gridColumn: `span ${v.col || 6} / span ${v.col || 6}`}}>
                     <Component
-                      label={v.name} name={v.name}
-                      required={false} defaultValue={v.value}
+                      label={v.label} name={v.name}
+                      required={false} 
+                      // defaultValue={v.value}
+                      value={listDataValue.find(v2 => v2.name == v.name)?.value}
+                      onChange={(v2) => onChangeValue(v2, v.name)}
                       details={{...v.details, tableName: 'setting'}}
                     />
                   </div> : null

@@ -5,8 +5,8 @@ import styles from "./screen.module.css";
 import { motion } from "framer-motion";
 import { useResizeObserver } from "@/lib/utils/clickOutside";
 
-const WebRootLayout = ({ children }: {
-  children: ReactNode
+const WebRootLayout = ({ children, className }: {
+  children: ReactNode, className?: string
 }) => {
   // socket io
   const socketRef = useRef<Socket>()
@@ -60,7 +60,7 @@ const WebRootLayout = ({ children }: {
         }
       `}</style>
 
-      <div ref={rootEl} className="relative overflow-hidden bg-gradient-to-tr from-[--bg-from] to-[--bg-to] transition-colors"
+      <div ref={rootEl} className={`relative overflow-hidden bg-gradient-to-tr from-[--bg-from] to-[--bg-to] transition-colors ${className}`}
         style={{width: '100%', height: '100%'}}
       >
         <div className="absolute w-full h-full bg-black/20"></div>

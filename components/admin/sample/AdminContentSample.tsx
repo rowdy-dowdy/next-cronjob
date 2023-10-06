@@ -1,7 +1,7 @@
 "use client"
-import { Backdrop, Box, CircularProgress, Fade, IconButton, Menu, MenuItem, Modal, Paper, Table, TableBody, TableCell, TableContainer, TableFooter, TableHead, TableRow, tableCellClasses } from '@mui/material'
-import TablePagination from '@mui/material/TablePagination';
-import Button from '@mui/material/Button';
+
+import { Backdrop, CircularProgress, Fade, Menu, MenuItem, Modal, Paper, Table, TableBody, TableContainer, TableFooter, TableHead, TableRow, TableCell, TablePagination, Button } from '@mui/material'
+import { tableCellClasses } from "@mui/material/TableCell";
 import { useState } from 'react'
 import styled from '@emotion/styled';
 import Link from 'next/link';

@@ -171,6 +171,8 @@ model File {
 model GroupSetting {
   id        String  @id @default(uuid())
   name      String
+  label     String?
+  sort      Int?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -181,10 +183,14 @@ model GroupSetting {
 model Setting {
   id        String  @id @default(uuid())
   name      String  @unique
+  label     String?
   type      String
   details   String?
   value     String?
   col       Int?
+  sort      Int?
+  show      Boolean @default(true)
+  required  Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

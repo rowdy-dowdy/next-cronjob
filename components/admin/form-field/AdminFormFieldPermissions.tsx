@@ -4,9 +4,9 @@ import { PermissionsOnRoles } from '@prisma/client'
 import React, { useEffect, useState, useRef, forwardRef, useImperativeHandle } from 'react'
 
 type State = {
-  label?: string,
+  label?: string | null,
   name?: string
-  required?: boolean,
+  required?: boolean | null,
   defaultValue?: PermissionsOnRoles[],
   value?: string,
   onChange?: (data: any) => void

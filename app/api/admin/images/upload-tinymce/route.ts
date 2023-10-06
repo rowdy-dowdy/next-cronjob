@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import { v4 } from 'uuid';
 import sharp from 'sharp';
 import { existsSync, mkdirSync } from 'fs';
@@ -6,7 +6,7 @@ import { extname } from 'path';
 import { lookup } from "mime-types";
 import fsPromise from "fs/promises";
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest): Promise<any> {
   try {
     const data = await request.formData()
     const file = data.get('file') as File

@@ -3,8 +3,8 @@ import { Backdrop, Button, CircularProgress } from '@mui/material'
 import { useRouter } from 'next/navigation'
 import React, { useState, FormEvent, MouseEvent } from 'react'
 import moment from 'moment'
-import { SampleColumnsType, addEditDataSample, changePublishData } from '@/lib/admin/sample'
-import { DATA_FIELDS } from '@/lib/admin/fields'
+import { SampleColumnSlugType, SampleColumnsType, addEditDataSample, changePublishData } from '@/lib/admin/sample'
+import { DATA_FIELDS, createDefaultValue } from '@/lib/admin/fields'
 import { promiseFunction } from '@/lib/admin/promise'
 import AdminFormFieldSlug from '../form-field/AdminFormFieldSlug'
 import slugify from 'slugify'
@@ -66,21 +66,6 @@ const AdminContentSampleCreateEdit: React.FC<SampleStateType> = ({
       }
     })
   }
-
-  // data form create
-  
-  const createDefaultValue = (column: SampleColumnsType) => {
-    if (column.type == "custom" && column.details.defaultValue) {
-      return column.details.defaultValue
-    }
-
-    const dataField = DATA_FIELDS[column.type]
-    if (dataField.defaultValue) {
-      return dataField.defaultValue
-    }
-
-    return ''
-  }
   
   // list data
   const [listDataValue, setListDataValue] = useState<{
@@ -89,8 +74,9 @@ const AdminContentSampleCreateEdit: React.FC<SampleStateType> = ({
   }[]>(columns.map(v => ({ name: v.name, value: (data && data[v.name]) ? data[v.name]  : createDefaultValue(v)})))
 
   const onChangeValue = (value: any, name: string) => {
-    //@ts-ignore
-    let column = columns.filter(v => v.type == "slug").find(v => v.details.tableNameSlug == name)
+    let column = (columns.filter(v => v.type == "slug") as ({
+      name: string
+    } & SampleColumnSlugType)[]).find(v => v.details.tableNameSlug == name)
 
     setListDataValue(state => state.map(v => {
       if (column && v.name == column.name) {

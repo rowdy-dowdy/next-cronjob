@@ -5,8 +5,8 @@ import React, { useRef, useState } from 'react'
 
 type State = {
   name?: string,
-  label?: string,
-  required?: boolean,
+  label?: string | null,
+  required?: boolean | null,
   className?: string,
   placeholder?: string,
   defaultValue?: any,

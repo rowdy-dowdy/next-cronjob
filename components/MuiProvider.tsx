@@ -1,16 +1,24 @@
 'use client'
 
 import { createTheme, alpha, getContrastRatio } from "@mui/material/styles";
-import { ThemeProvider, CssBaseline } from '@mui/material'
-import React, { useEffect, useRef, useState } from "react";
-import { Nunito, M_PLUS_Rounded_1c } from 'next/font/google'
+// import { ThemeProvider, CssBaseline } from '@mui/material'
+import ThemeProvider  from "@mui/material/styles/ThemeProvider";
+import CssBaseline from "@mui/material/CssBaseline";
+import { useEffect, useRef, useState } from "react";
+import { Nunito, Roboto } from 'next/font/google'
 import { SnackbarProvider } from "notistack";
 import useSettings from "@/stores/settings";
 import { StyleRegistry, createStyleRegistry } from "styled-jsx";
 import { useServerInsertedHTML } from "next/navigation";
 
-const font = Nunito({
+const nunito = Nunito({
   weight: ['900', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin']
+})
+
+const roboto = Roboto({
+  weight: ['400', '500', '700'],
   style: ['normal', 'italic'],
   subsets: ['latin']
 })
@@ -40,7 +48,7 @@ export const lightTheme = createTheme({
   },
   typography: {
     // fontFamily: ''
-    fontFamily: font.style.fontFamily
+    // fontFamily: `${roboto.style.fontFamily}, ${nunito.style.fontFamily}`
   }
 })
 
@@ -87,11 +95,11 @@ const MuiProvider: React.FC<{
 
   return (
     <ThemeProvider theme={lightTheme}>
-      <style global jsx>{`
+      {/* <style global jsx>{`
         html {
-          font-family: ${font.style.fontFamily};
+          font-family: ${roboto.style.fontFamily};
         }
-      `}</style>
+      `}</style> */}
       <CssBaseline />
       <SnackbarProvider maxSnack={3} autoHideDuration={3000} anchorOrigin={{
         vertical: 'top',

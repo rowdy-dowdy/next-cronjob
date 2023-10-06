@@ -24,7 +24,7 @@ const getAdminHistory = async (page: number = 1, per_page: number = 10) => {
         take: per_page,
         skip: start,
         orderBy: {
-          id: 'desc',
+          createdAt: 'desc',
         },
         select: {
           id: true,
@@ -105,6 +105,12 @@ const getAccessDevice = async () => {
           (SELECT COUNT(*) FROM "AccessHistory" WHERE "device" = 'PC') as pc
       `
     );
+
+    // mysql select
+    // `SELECT
+    //   (SELECT COUNT(*) FROM \`AccessHistory\` WHERE \`device\` = 'Mobile') as mobile,
+    //   (SELECT COUNT(*) FROM \`AccessHistory\` WHERE \`device\` = 'Tablet') as tablet,
+    //   (SELECT COUNT(*) FROM \`AccessHistory\` WHERE \`device\` = 'PC') as pc`
 
     return {counts: counts[0]}
   } catch (error) {

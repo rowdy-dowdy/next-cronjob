@@ -60,7 +60,7 @@ type ComponentType = {
   checked?: boolean,
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void
   size?: "small" | "medium",
-  label?: string,
+  label?: string | null,
   inputProps?: React.InputHTMLAttributes<HTMLInputElement>
   name?: string,
   className?: string,
