@@ -1,6 +1,11 @@
+import ClientOnly from "@/components/ClientOnly"
+import MapContent from "@/components/map/content/MapContent"
+
 const page = () => {
   return (
-    <div>page</div>
+    <ClientOnly>
+      <MapContent />
+    </ClientOnly>
   )
 }
 
