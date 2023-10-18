@@ -243,7 +243,7 @@ export const addEditDataSample = async ({
           return { [pre.name]: +(data[pre.name]) }
         }
         else if (pre.type == "password") {
-          return { [pre.name]: await bcrypt.hash("password", 10) }
+          return { [pre.name]: await bcrypt.hash(data[pre.name], 10) }
         }
         else if (pre.type == "file") {
           if (data[pre.name]) {

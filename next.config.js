@@ -6,7 +6,7 @@ const nextConfig = {
   experimental: {
     serverActions: true,
     serverActionsBodySizeLimit: '20mb',
-    serverComponentsExternalPackages: ['bcrypt', 'sharp', 'crypto', "uuid"],
+    serverComponentsExternalPackages: ['bcrypt', 'sharp', 'crypto', "uuid", "fs"],
   },
 
   webpack: (config) => {

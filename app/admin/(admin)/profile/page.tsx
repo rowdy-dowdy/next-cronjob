@@ -2,7 +2,7 @@ import ProfileContentAdmin from '@/components/admin/content/ProfileContentAdmin'
 import { useCurrentUserAdmin } from '@/lib/admin/helperServer'
 import db from '@/lib/admin/prismadb'
 import { redirect } from 'next/navigation'
-import React from 'react'
+import bcrypt from 'bcrypt'
 
 export type UpdateProfileType = {
   name: string,
@@ -31,7 +31,7 @@ export default async function page() {
           name,
           email,
           imageId: imageId || undefined,
-          password: password || undefined
+          password: await bcrypt.hash(password || '', 10)
         }
       })
   
